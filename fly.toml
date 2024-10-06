@@ -9,8 +9,7 @@ primary_region = 'waw'
 console_command = "iex -S mix"
 
 [build]
-  builder = "heroku/buildpacks:20"
-  buildpacks = ["https://cnb-shim.herokuapp.com/v1/hashnuke/elixir"]
+dockerfile = "Dockerfile"
 
 [env]
   PORT = '8080'
@@ -28,8 +27,5 @@ console_command = "iex -S mix"
   cpu_kind = 'shared'
   cpus = 1
 
-[processes]
-  app = "mix run --no-halt"
-  console = "iex -S mix"
 
 
