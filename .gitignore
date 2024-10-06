@@ -25,4 +25,3 @@ sowa_notifier-*.tar
 # Temporary files, for example, from tests.
 /tmp/
 .env
-/priv

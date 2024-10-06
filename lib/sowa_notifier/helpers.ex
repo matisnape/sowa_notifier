@@ -3,6 +3,8 @@ defmodule SowaNotifier.Helpers do
 
   def save_to_json_file(existing_data, new_items) do
     updated_data = (existing_data ++ new_items) |> Enum.map(&atom_keys_to_strings/1)
+
+    File.mkdir_p!(Path.dirname(@json_file_path))
     File.write!(@json_file_path, Jason.encode!(updated_data))
   end
 

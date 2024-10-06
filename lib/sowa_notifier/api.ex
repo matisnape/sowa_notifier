@@ -5,7 +5,6 @@ defmodule SowaNotifier.Api do
   plug(Tesla.Middleware.JSON)
 
   @url "https://katalog.wbp.poznan.pl/index.php?KatID=2&typ=repl&plnk=nowosci&sort=dat"
-  @webhook_url System.get_env("SOWA_NOTIFIER_WEBHOOK_URL")
 
   def fetch_page do
     case get(@url) do
@@ -29,16 +28,18 @@ defmodule SowaNotifier.Api do
       book: book
     }
 
-    IO.inspect(@webhook_url)
-
-    case post(@webhook_url, payload) do
+    case post(webhook_url(), payload) do
       {:ok, %{status: 200}} ->
-        IO.puts("Webhook sent successfully")
+        IO.puts("Webhook sent successfully for #{book.title}")
         {:ok, "Webhook sent successfully"}
 
       {:error, reason} ->
         IO.puts("Failed to send webhook: #{inspect(reason)}")
         {:error, "Failed to send webhook: #{inspect(reason)}"}
     end
+  end
+
+  defp webhook_url() do
+    Application.fetch_env!(:sowa_notifier, :webhook_url)
   end
 end
