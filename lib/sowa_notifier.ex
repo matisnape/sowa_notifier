@@ -16,8 +16,12 @@ defmodule SowaNotifier do
       successfully_sent_items =
         Enum.reduce(new_items, [], fn item, acc ->
           case Api.send_webhook(item) do
-            {:ok, _response} -> [item | acc]
-            _ -> acc
+            {:ok, _response} ->
+              Process.sleep(5000)
+              [item | acc]
+
+            _ ->
+              acc
           end
         end)
 
