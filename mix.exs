@@ -26,7 +26,8 @@ defmodule SowaNotifier.MixProject do
       {:quantum, "~> 3.0"},
       {:tzdata, "~> 1.1"},
       {:dotenv, "~> 3.0.0"},
-      {:mock, "~> 0.3.0", only: :test}
+      {:mock, "~> 0.3.0", only: :test},
+      {:plug_cowboy, "~> 2.5"}
     ]
   end
 end

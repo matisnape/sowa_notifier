@@ -20,6 +20,9 @@ RUN mix deps.get --only prod
 # Copy the rest of the application code
 COPY . .
 
+# Copy static files
+COPY public/static /app/public/static
+
 # Compile the project
 RUN MIX_ENV=prod mix compile
 

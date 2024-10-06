@@ -8,7 +8,8 @@ defmodule SowaNotifier.Application do
     end
 
     children = [
-      SowaScheduler
+      SowaScheduler,
+      {Plug.Cowboy, scheme: :http, plug: SowaNotifier.Router, options: [port: 8080]}
     ]
 
     opts = [strategy: :one_for_one, name: SowaNotifier.Supervisor]
