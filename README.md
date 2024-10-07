@@ -6,7 +6,7 @@ SowaNotifier is an Elixir application that monitors the catalog of the Wielkopol
 
 - Fetches and parses the WBP Poznań catalog page
 - Detects new book additions
-- Sends notifications via webhook
+- Sends notifications via Slack webhook
 - Stores processed data to avoid duplicate notifications
 
 ## Installation
@@ -37,7 +37,7 @@ SowaNotifier is an Elixir application that monitors the catalog of the Wielkopol
 
 The application uses environment variables for configuration. Make sure to set up the following:
 
-- `SOWA_NOTIFIER_WEBHOOK_URL`: The URL of the webhook to send notifications to.
+- `SOWA_NOTIFIER_WEBHOOK_URL`: The URL of the Slack webhook to send notifications to.
 
 You can set these in your `.env` file for development or directly in your environment for production.
 
