@@ -7,6 +7,8 @@ defmodule SowaNotifier.Application do
       Mix.Task.run("loadconfig")
     end
 
+    SowaNotifier.Helpers.init_file()
+
     children = [
       SowaScheduler,
       {Plug.Cowboy, scheme: :http, plug: SowaNotifier.Router, options: [port: 8080]}

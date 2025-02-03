@@ -39,6 +39,9 @@ LABEL app="sowa_notifier"
 # Set the working directory
 WORKDIR /app
 
+# Create data directory
+RUN mkdir -p /app/data
+
 # Copy the compiled application from the build stage
 COPY --from=build /app /app
 

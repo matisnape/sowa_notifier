@@ -1,15 +1,25 @@
 defmodule SowaNotifier.Helpers do
-  @json_file_path Path.join(:code.priv_dir(:sowa_notifier), "parsed_books.json")
+  # @data_file get_data_file_path()
+  @json_file_path
+  @data_file Path.join(:code.priv_dir(:sowa_notifier), "parsed_books.json")
+
+  def init_file do
+    File.mkdir_p!(Path.dirname(@data_file))
+
+    unless File.exists?(@data_file) do
+      File.write!(@data_file, "[]")
+    end
+  end
 
   def save_to_json_file(existing_data, new_items) do
     updated_data = (existing_data ++ new_items) |> Enum.map(&atom_keys_to_strings/1)
 
-    File.mkdir_p!(Path.dirname(@json_file_path))
-    File.write!(@json_file_path, Jason.encode!(updated_data))
+    # File.mkdir_p!(Path.dirname(@json_file_path))
+    File.write!(@data_file, Jason.encode!(updated_data))
   end
 
   def read_json_file do
-    case File.read(@json_file_path) do
+    case File.read(@data_file) do
       {:ok, content} ->
         Jason.decode!(content)
         |> Enum.map(&string_keys_to_atoms/1)
@@ -33,5 +43,12 @@ defmodule SowaNotifier.Helpers do
 
   defp atom_keys_to_strings(map) do
     for {key, val} <- map, into: %{}, do: {Atom.to_string(key), val}
+  end
+
+  defp get_data_file_path() do
+    case System.get_env("MIX_ENV") do
+      "prod" -> "/app/data/parsed_books.json"
+      _ -> Path.join(File.cwd!(), "priv/parsed_books.json")
+    end
   end
 end
