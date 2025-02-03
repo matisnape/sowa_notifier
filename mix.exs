@@ -27,7 +27,9 @@ defmodule SowaNotifier.MixProject do
       {:tzdata, "~> 1.1"},
       {:dotenv, "~> 3.0.0"},
       {:mock, "~> 0.3.0", only: :test},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:telegex, "~> 1.9.0-rc.0"},
+      {:ex_gram, "~> 0.53"}
     ]
   end
 end

@@ -1,0 +1,245 @@
+<div class="record-details with-facet" data-recid="U518584" data-favourite="false">
+  <div class="record-thumb record-thumb-with-av">
+
+
+    <div onclick="location.href='https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=record&amp;001=POZN+W24003767'" title="Open the page for this record">
+      <img border="0" src="//dziupla.sowa.pl/f/6oxaz0zsvscd2.jpg?imwh=205x300">
+
+        <div class="av-status-icon">
+          <span class="av-status-loaned" title="All copies are currently on loan"></span>
+        </div>
+      </div>
+
+    </div>
+    <div class="record-description" data-opacit-best="loaned">
+      <div class="record-heading">
+        <div class="record-kind-info">
+          <div class="record-kind-kind">
+            <svg>
+              <use xlink:href="#k-book"></use>
+            </svg>
+            <span class="record-kind-descr">Book</span>
+          </div>
+          <div class="record-in-basket">
+            <svg class="svg-inline--fa fa-basket-shopping" data-fa-transform="up-1" aria-hidden="true" focusable="false" data-prefix="fass" data-icon="basket-shopping" role="img"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg="" style="transform-origin: 0.5625em 0.4375em;">
+              <g transform="translate(288 256)">
+                <g transform="translate(0, -32)  scale(1, 1)  rotate(0 0 0)">
+                  <path fill="currentColor" d="M245.3 51.1l11.1-21.3L213.8 7.6 202.7 28.9 117.6 192H0v64H32L96 512H480l64-256h32V192H458.4L373.3 28.9 362.2 7.6 319.6 29.8l11.1 21.3L404.2 192H171.8L245.3 51.1zM192 304v96 16H160V400 304 288h32v16zm112-16v16 96 16H272V400 304 288h32zm112 16v96 16H384V400 304 288h32v16z" transform="translate(-288 -256)"></path>
+                </g>
+              </g>
+            </svg>            <!-- <i class="fa-sharp fa-solid fa-basket-shopping" data-fa-transform="up-1"></i> -->
+                                        In basket
+          </div>
+        </div>
+        <div class="record-remarks">
+          <div title="Rating: No rating (0)">
+            <svg class="svg-inline--fa fa-star" aria-hidden="true" focusable="false" data-prefix="far" data-icon="star" role="img"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg="">
+              <path fill="currentColor" d="M287.9 0c9.2 0 17.6 5.2 21.6 13.5l68.6 141.3 153.2 22.6c9 1.3 16.5 7.6 19.3 16.3s.5 18.1-5.9 24.5L433.6 328.4l26.2 155.6c1.5 9-2.2 18.1-9.6 23.5s-17.3 6-25.3 1.7l-137-73.2L151 509.1c-8.1 4.3-17.9 3.7-25.3-1.7s-11.2-14.5-9.7-23.5l26.2-155.6L31.1 218.2c-6.5-6.4-8.7-15.9-5.9-24.5s10.3-14.9 19.3-16.3l153.2-22.6L266.3 13.5C270.4 5.2 278.7 0 287.9 0zm0 79L235.4 187.2c-3.5 7.1-10.2 12.1-18.1 13.3L99 217.9 184.9 303c5.5 5.5 8.1 13.3 6.8 21L171.4 443.7l105.2-56.2c7.1-3.8 15.6-3.8 22.6 0l105.2 56.2L384.2 324.1c-1.3-7.7 1.2-15.5 6.8-21l85.9-85.1L358.6 200.5c-7.8-1.2-14.6-6.1-18.1-13.3L287.9 79z"></path>
+            </svg>            <!-- <i class="fa-regular fa-star"></i> -->
+            <svg class="svg-inline--fa fa-star" aria-hidden="true" focusable="false" data-prefix="far" data-icon="star" role="img"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg="">
+              <path fill="currentColor" d="M287.9 0c9.2 0 17.6 5.2 21.6 13.5l68.6 141.3 153.2 22.6c9 1.3 16.5 7.6 19.3 16.3s.5 18.1-5.9 24.5L433.6 328.4l26.2 155.6c1.5 9-2.2 18.1-9.6 23.5s-17.3 6-25.3 1.7l-137-73.2L151 509.1c-8.1 4.3-17.9 3.7-25.3-1.7s-11.2-14.5-9.7-23.5l26.2-155.6L31.1 218.2c-6.5-6.4-8.7-15.9-5.9-24.5s10.3-14.9 19.3-16.3l153.2-22.6L266.3 13.5C270.4 5.2 278.7 0 287.9 0zm0 79L235.4 187.2c-3.5 7.1-10.2 12.1-18.1 13.3L99 217.9 184.9 303c5.5 5.5 8.1 13.3 6.8 21L171.4 443.7l105.2-56.2c7.1-3.8 15.6-3.8 22.6 0l105.2 56.2L384.2 324.1c-1.3-7.7 1.2-15.5 6.8-21l85.9-85.1L358.6 200.5c-7.8-1.2-14.6-6.1-18.1-13.3L287.9 79z"></path>
+            </svg>            <!-- <i class="fa-regular fa-star"></i> -->
+            <svg class="svg-inline--fa fa-star" aria-hidden="true" focusable="false" data-prefix="far" data-icon="star" role="img"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg="">
+              <path fill="currentColor" d="M287.9 0c9.2 0 17.6 5.2 21.6 13.5l68.6 141.3 153.2 22.6c9 1.3 16.5 7.6 19.3 16.3s.5 18.1-5.9 24.5L433.6 328.4l26.2 155.6c1.5 9-2.2 18.1-9.6 23.5s-17.3 6-25.3 1.7l-137-73.2L151 509.1c-8.1 4.3-17.9 3.7-25.3-1.7s-11.2-14.5-9.7-23.5l26.2-155.6L31.1 218.2c-6.5-6.4-8.7-15.9-5.9-24.5s10.3-14.9 19.3-16.3l153.2-22.6L266.3 13.5C270.4 5.2 278.7 0 287.9 0zm0 79L235.4 187.2c-3.5 7.1-10.2 12.1-18.1 13.3L99 217.9 184.9 303c5.5 5.5 8.1 13.3 6.8 21L171.4 443.7l105.2-56.2c7.1-3.8 15.6-3.8 22.6 0l105.2 56.2L384.2 324.1c-1.3-7.7 1.2-15.5 6.8-21l85.9-85.1L358.6 200.5c-7.8-1.2-14.6-6.1-18.1-13.3L287.9 79z"></path>
+            </svg>            <!-- <i class="fa-regular fa-star"></i> -->
+            <svg class="svg-inline--fa fa-star" aria-hidden="true" focusable="false" data-prefix="far" data-icon="star" role="img"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg="">
+              <path fill="currentColor" d="M287.9 0c9.2 0 17.6 5.2 21.6 13.5l68.6 141.3 153.2 22.6c9 1.3 16.5 7.6 19.3 16.3s.5 18.1-5.9 24.5L433.6 328.4l26.2 155.6c1.5 9-2.2 18.1-9.6 23.5s-17.3 6-25.3 1.7l-137-73.2L151 509.1c-8.1 4.3-17.9 3.7-25.3-1.7s-11.2-14.5-9.7-23.5l26.2-155.6L31.1 218.2c-6.5-6.4-8.7-15.9-5.9-24.5s10.3-14.9 19.3-16.3l153.2-22.6L266.3 13.5C270.4 5.2 278.7 0 287.9 0zm0 79L235.4 187.2c-3.5 7.1-10.2 12.1-18.1 13.3L99 217.9 184.9 303c5.5 5.5 8.1 13.3 6.8 21L171.4 443.7l105.2-56.2c7.1-3.8 15.6-3.8 22.6 0l105.2 56.2L384.2 324.1c-1.3-7.7 1.2-15.5 6.8-21l85.9-85.1L358.6 200.5c-7.8-1.2-14.6-6.1-18.1-13.3L287.9 79z"></path>
+            </svg>            <!-- <i class="fa-regular fa-star"></i> -->
+            <svg class="svg-inline--fa fa-star" aria-hidden="true" focusable="false" data-prefix="far" data-icon="star" role="img"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg="">
+              <path fill="currentColor" d="M287.9 0c9.2 0 17.6 5.2 21.6 13.5l68.6 141.3 153.2 22.6c9 1.3 16.5 7.6 19.3 16.3s.5 18.1-5.9 24.5L433.6 328.4l26.2 155.6c1.5 9-2.2 18.1-9.6 23.5s-17.3 6-25.3 1.7l-137-73.2L151 509.1c-8.1 4.3-17.9 3.7-25.3-1.7s-11.2-14.5-9.7-23.5l26.2-155.6L31.1 218.2c-6.5-6.4-8.7-15.9-5.9-24.5s10.3-14.9 19.3-16.3l153.2-22.6L266.3 13.5C270.4 5.2 278.7 0 287.9 0zm0 79L235.4 187.2c-3.5 7.1-10.2 12.1-18.1 13.3L99 217.9 184.9 303c5.5 5.5 8.1 13.3 6.8 21L171.4 443.7l105.2-56.2c7.1-3.8 15.6-3.8 22.6 0l105.2 56.2L384.2 324.1c-1.3-7.7 1.2-15.5 6.8-21l85.9-85.1L358.6 200.5c-7.8-1.2-14.6-6.1-18.1-13.3L287.9 79z"></path>
+            </svg>            <!-- <i class="fa-regular fa-star"></i> -->
+            <a href="javascript:Konto('2','w_bibliotece_pl','&amp;do=review&amp;idw=U518584&amp;sn=735026bf42694004beed3bae7e7f127a')">
+                                        rate
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="record-meta">
+        <div class="desc-header">New item since: 04.10.2024</div>
+        <div class="desc-opis">
+          <span class="desc-o-title">
+            <a data-001="POZN W24003767" href="https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=record&amp;001=POZN%20W24003767">
+              <span class="desc-o-mb-title">
+                Jadwiga : opowieść o Stańczakowej
+              </span>
+              <span class="desc-o-b-rest">
+                 / Justyna Sobolewska.
+              </span>
+            </a>
+            <span class="desc-o-sep">-</span>
+            <span class="desc-o-wyd">Wydanie I.</span>
+          </span>
+
+
+          <span class="desc-o-sep first-sep">-</span>
+          <span class="desc-o-publ">
+                            Kraków : <a class="sowa-phplink" href="https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=repl&amp;plnk=__wydawca_Wydawnictwo Znak" rel="nofollow">Wydawnictwo Znak</a>, 2024.
+          </span>
+
+          <span class="desc-o-sep">-</span>
+          <span class="desc-o-phis">312, [8] stron : faksymilia, fotografie, portrety, tablica genealogiczna ; 22 cm.</span>
+        </div>
+
+
+        <div class="desc-descr-blocks">
+          <div class="desc-descr-block-author">
+            <div class="desc-descr-name">Author</div>
+            <div class="desc-descr-items">
+              <span>
+                <a class="sowa-phplink" href="https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=repl&amp;plnk=q__*&amp;fauthor=Sobolewska+Justyna+%281972-+%29" rel="nofollow">Sobolewska Justyna (1972- )</a>
+              </span>
+            </div>
+          </div>
+
+          <div class="desc-descr-block-form">
+            <div class="desc-descr-name">Form of Work</div>
+            <div class="desc-descr-items">
+              <span>
+                <a class="sowa-phplink" href="https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=repl&amp;plnk=q__*&amp;fform=Ksi%C4%85%C5%BCki" rel="nofollow">Książki</a>
+              </span>
+              <span>
+                <a class="sowa-phplink" href="https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=repl&amp;plnk=q__*&amp;fform=Literatura+faktu%2C+eseje%2C+publicystyka" rel="nofollow">Literatura faktu, eseje, publicystyka</a>
+              </span>
+            </div>
+          </div>
+          <div class="desc-descr-block-demographic">
+            <div class="desc-descr-name">Demographic Group</div>
+            <div class="desc-descr-items">
+              <span>
+                <a class="sowa-phplink" href="https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=repl&amp;plnk=q__*&amp;fdemographic=Literatura+polska" rel="nofollow">Literatura polska</a>
+              </span>
+            </div>
+          </div>
+          <div class="desc-descr-block-subject">
+            <div class="desc-descr-name">Subject</div>
+            <div class="desc-descr-items">
+              <span>
+                <a class="sowa-phplink" href="https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=repl&amp;plnk=q__*&amp;fsubject=Sta%C5%84czakowa%2C+Jadwiga+%281919-1996%29" rel="nofollow">Stańczakowa, Jadwiga (1919-1996)</a>
+              </span>
+              <span>
+                <a class="sowa-phplink" href="https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=repl&amp;plnk=q__*&amp;fsubject=Niewidomi" rel="nofollow">Niewidomi</a>
+              </span>
+              <span>
+                <a class="sowa-phplink" href="https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=repl&amp;plnk=q__*&amp;fsubject=Pisarze+polscy" rel="nofollow">Pisarze polscy</a>
+              </span>
+              <span>
+                <a class="sowa-phplink" href="https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=repl&amp;plnk=q__*&amp;fsubject=Poeci" rel="nofollow">Poeci</a>
+              </span>
+              <span>
+                <a class="sowa-phplink" href="https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=repl&amp;plnk=q__*&amp;fsubject=%C5%BBycie+artystyczne" rel="nofollow">Życie artystyczne</a>
+              </span>
+            </div>
+          </div>
+          <div class="desc-descr-block-genre">
+            <div class="desc-descr-name">Genre/Form</div>
+            <div class="desc-descr-items">
+              <span>
+                <a class="sowa-phplink" href="https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=repl&amp;plnk=q__*&amp;fgenre=Biografia" rel="nofollow">Biografia</a>
+              </span>
+            </div>
+          </div>
+          <div class="desc-descr-block-domain">
+            <div class="desc-descr-name">Domain</div>
+            <div class="desc-descr-items">
+              <span>
+                <a class="sowa-phplink" href="https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=repl&amp;plnk=q__*&amp;fdomain=Historia" rel="nofollow">Historia</a>
+              </span>
+              <span>
+                <a class="sowa-phplink" href="https://katalog.wbp.poznan.pl/index.php?KatID=2&amp;typ=repl&amp;plnk=q__*&amp;fdomain=Literaturoznawstwo" rel="nofollow">Literaturoznawstwo</a>
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+
+
+
+      </div>
+      <div class="record-availability record-av-loaned">
+        <div class="record-av-bests">
+          <a class="record-av-details-expanded" href="#" onclick="return details_toggle(this, 'U518584');">
+            <span>
+              <span class="exactly-described">currently</span> on loan</span>
+            <svg class="svg-inline--fa fa-angles-down" data-fa-transform="down-1 right-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angles-down" role="img"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="" style="transform-origin: 0.5625em 0.5625em;">
+              <g transform="translate(224 256)">
+                <g transform="translate(64, 32)  scale(1, 1)  rotate(0 0 0)">
+                  <path fill="currentColor" d="M246.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-160-160c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L224 402.7 361.4 265.4c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3l-160 160zm160-352l-160 160c-12.5 12.5-32.8 12.5-45.3 0l-160-160c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L224 210.7 361.4 73.4c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3z" transform="translate(-224 -256)"></path>
+                </g>
+              </g>
+            </svg>            <!-- <i class="fa-solid fa-angles-down" data-fa-transform="down-1 right-2"></i> -->
+            <svg class="svg-inline--fa fa-angles-up" data-fa-transform="down-1 right-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angles-up" role="img"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="" style="transform-origin: 0.5625em 0.5625em;">
+              <g transform="translate(224 256)">
+                <g transform="translate(64, 32)  scale(1, 1)  rotate(0 0 0)">
+                  <path fill="currentColor" d="M246.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 109.3 361.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160zm160 352l-160-160c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 301.3 361.4 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3z" transform="translate(-224 -256)"></path>
+                </g>
+              </g>
+            </svg>            <!-- <i class="fa-solid fa-angles-up" data-fa-transform="down-1 right-2"></i> -->
+          </a>
+        </div>
+        <div class="record-av-to-teka">
+          <button type="button" onclick="send_to_teka('U518584'); return false;">
+            <svg class="svg-inline--fa fa-square-up-right fa-flip-horizontal" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="square-up-right" role="img"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+              <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96C0 60.7 28.7 32 64 32H384zM320 313.4V176c0-8.8-7.2-16-16-16H166.6c-12.5 0-22.6 10.1-22.6 22.6c0 6 2.4 11.8 6.6 16L184 232l-66.3 66.3C114 302 112 306.9 112 312s2 10 5.7 13.7l36.7 36.7c3.6 3.6 8.5 5.7 13.7 5.7s10-2 13.7-5.7L248 296l33.4 33.4c4.2 4.2 10 6.6 16 6.6c12.5 0 22.6-10.1 22.6-22.6z"></path>
+            </svg>            <!-- <i class="fa-solid fa-square-up-right fa-flip-horizontal"></i> -->
+            <span>wybierz</span>
+          </button>
+        </div>
+        <div class="record-av-to-basket">
+          <button type="button" onclick="local_basket_toggle('U518584', this); return false;">
+            <svg class="svg-inline--fa fa-basket-shopping" aria-hidden="true" focusable="false" data-prefix="fass" data-icon="basket-shopping" role="img"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg="">
+              <path fill="currentColor" d="M245.3 51.1l11.1-21.3L213.8 7.6 202.7 28.9 117.6 192H0v64H32L96 512H480l64-256h32V192H458.4L373.3 28.9 362.2 7.6 319.6 29.8l11.1 21.3L404.2 192H171.8L245.3 51.1zM192 304v96 16H160V400 304 288h32v16zm112-16v16 96 16H272V400 304 288h32zm112 16v96 16H384V400 304 288h32v16z"></path>
+            </svg>            <!-- <i class="fa-sharp fa-solid fa-basket-shopping"></i> -->
+            <span class="record-basket-add">add</span>
+            <span class="record-basket-del">remove</span>
+          </button>
+        </div>
+      </div>
+      <div class="record-availability-summary record-availability-hidden" data-recid="U518584">
+                                                                                                                                                                    This item is available in one branch. Expand information to see details.
+      </div>
+      <div class="record-availability-details " data-recid="U518584">
+        <form name="booking-form-U518584-01" method="post" action="index.php?KatID=2&amp;typ=acc" onsubmit="return perform_reservation(this)">
+          <div class="record-av-details-row">
+            <div data-agenda="01">
+              <div class="record-av-details-agenda">
+                                                                                                    Wypożyczalnia - ul. Prusa 3
+              </div>
+              <div>
+                                                                                                    All copies are currently on loan: <span class="opacit-signature">sygn.
+                                                                                                            194958                                                                                                        </span>
+                                                                                                (                <span class="opacit-count">1 egz.</span>)                                            
+              </div>
+              <div>
+              </div>
+
+            </div>
+            <div>
+              <input type="hidden" name="id" value="reserved">
+                <input type="hidden" name="lendop" value="order">
+                  <input type="hidden" name="idw" value="U518584">
+                    <input type="hidden" name="agenda" value="01">
+                      <input type="hidden" name="pickups" value="01">
+                        <button class="record-av-agenda-button record-av-agenda-button-loaned" type="submit" data-for="U518584-01">
+                                                    queue up
+                        </button>
+                      </div>
+                    </div>
+                    <div class="record-av-details-opts" data-for="U518584-01"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
