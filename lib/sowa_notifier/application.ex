@@ -11,10 +11,16 @@ defmodule SowaNotifier.Application do
 
     children = [
       SowaScheduler,
-      {Plug.Cowboy, scheme: :http, plug: SowaNotifier.Router, options: [port: 8080]}
+      {Plug.Cowboy, scheme: :http, plug: SowaNotifier.Router, options: [port: 8080]},
+      ExGram,
+      {SowaNotifier.Telegram.Bot, [method: :polling, token: telegram_token()]}
     ]
 
     opts = [strategy: :one_for_one, name: SowaNotifier.Supervisor]
     Supervisor.start_link(children, opts)
+  end
+
+  defp telegram_token do
+    Application.fetch_env!(:ex_gram, :token)
   end
 end
