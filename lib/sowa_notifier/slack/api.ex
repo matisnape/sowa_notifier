@@ -1,4 +1,4 @@
-defmodule SowaNotifier.Api do
+defmodule SowaNotifier.Slack.Api do
   use Tesla
 
   plug(Tesla.Middleware.Headers, [{"user-agent", "SowaNotifier Bot"}])

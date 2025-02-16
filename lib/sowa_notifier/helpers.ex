@@ -11,6 +11,8 @@ defmodule SowaNotifier.Helpers do
     end
   end
 
+  def save_to_json_file(_existing_data, []), do: :ok
+
   def save_to_json_file(existing_data, new_items) do
     updated_data = (existing_data ++ new_items) |> Enum.map(&atom_keys_to_strings/1)
 
@@ -47,10 +49,10 @@ defmodule SowaNotifier.Helpers do
     for {key, val} <- map, into: %{}, do: {Atom.to_string(key), val}
   end
 
-  defp get_data_file_path() do
-    case System.get_env("MIX_ENV") do
-      "prod" -> "/app/data/parsed_books.json"
-      _ -> Path.join(File.cwd!(), "priv/parsed_books.json")
-    end
-  end
+  # defp get_data_file_path() do
+  #   case System.get_env("MIX_ENV") do
+  #     "prod" -> "/app/data/parsed_books.json"
+  #     _ -> Path.join(File.cwd!(), "priv/parsed_books.json")
+  #   end
+  # end
 end

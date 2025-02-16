@@ -1,7 +1,7 @@
 defmodule SowaNotifier do
   import SowaNotifier.Helpers
 
-  alias SowaNotifier.Api
+  alias SowaNotifier.Slack.Api
   alias SowaNotifier.Telegram.Bot
   alias SowaNotifier.Parser
 
@@ -12,15 +12,22 @@ defmodule SowaNotifier do
     with {:ok, html} <- Api.fetch_page(),
          {:ok, parsed_data} <- Parser.run(html),
          {:existing_data, {:ok, existing_data}} <- {:existing_data, read_json_file()},
-         {:new_items, new_items} <- {:new_items, find_new_items(existing_data, parsed_data)} do
-      successfully_sent_items = new_items |> notify_slack() |> notify_telegram_subscribers()
-
+         {:new_items, new_items} <- {:new_items, find_new_items(existing_data, parsed_data)},
+         {:notified, successfully_sent_items} <- {:notified, notify_all(new_items)} do
       save_to_json_file(existing_data, successfully_sent_items)
 
       {:ok, successfully_sent_items}
     else
       error -> error
     end
+  end
+
+  defp notify_all([]), do: []
+
+  defp notify_all(items) do
+    items
+    |> notify_slack()
+    |> notify_telegram_subscribers()
   end
 
   defp notify_slack(items) do
