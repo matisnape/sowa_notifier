@@ -13,7 +13,8 @@ defmodule SowaNotifier.Application do
       SowaScheduler,
       {Plug.Cowboy, scheme: :http, plug: SowaNotifier.Router, options: [port: 8080]},
       ExGram,
-      {SowaNotifier.Telegram.Bot, [method: :polling, token: telegram_token()]}
+      {SowaNotifier.Telegram.Bot, [method: :polling, token: telegram_token()]},
+      SowaNotifier.Telegram.Subscription
     ]
 
     opts = [strategy: :one_for_one, name: SowaNotifier.Supervisor]
