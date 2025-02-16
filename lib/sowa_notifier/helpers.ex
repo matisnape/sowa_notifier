@@ -1,6 +1,6 @@
 defmodule SowaNotifier.Helpers do
   # @data_file get_data_file_path()
-  @json_file_path
+  # @json_file_path
   @data_file Path.join(:code.priv_dir(:sowa_notifier), "parsed_books.json")
 
   def init_file do
@@ -21,11 +21,13 @@ defmodule SowaNotifier.Helpers do
   def read_json_file do
     case File.read(@data_file) do
       {:ok, content} ->
-        Jason.decode!(content)
+        content
+        |> Jason.decode!()
         |> Enum.map(&string_keys_to_atoms/1)
+        |> then(&{:ok, &1})
 
       {:error, :enoent} ->
-        []
+        {:ok, []}
 
       {:error, reason} ->
         raise "Error reading JSON file: #{inspect(reason)}"
