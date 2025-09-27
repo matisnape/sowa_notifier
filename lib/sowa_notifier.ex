@@ -1,15 +1,15 @@
 defmodule SowaNotifier do
   import SowaNotifier.Helpers
 
-  alias SowaNotifier.Slack.Api
+  alias SowaNotifier.Api
   alias SowaNotifier.Telegram.Bot
   alias SowaNotifier.Parser
 
   @doc """
   Fetches the catalog page, parses the data, sends webhooks for new items, and saves successfully sent items to a JSON file.
   """
-  def fetch_and_parse do
-    with {:ok, html} <- Api.fetch_page(),
+  def fetch_and_parse() do
+    with {:ok, html} <- Api.fetch_page(url()),
          {:ok, parsed_data} <- Parser.run(html),
          {:existing_data, {:ok, existing_data}} <- {:existing_data, read_json_file()},
          {:new_items, new_items} <- {:new_items, find_new_items(existing_data, parsed_data)},
@@ -57,5 +57,11 @@ defmodule SowaNotifier do
           acc
       end
     end)
+  end
+
+  defp url() do
+    Application.fetch_env!(:sowa_notifier, :libraries)
+    |> Keyword.fetch!(:wbpicak)
+    |> Keyword.fetch!(:url)
   end
 end
