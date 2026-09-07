@@ -1,0 +1,661 @@
+{
+  "name": "SowaNotifier WBPiCAK",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "id": "97e42bc3-9168-49fc-97b4-cdd6d994e50a",
+      "name": "Co 5 minut",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -960,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "open-now",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "leftValue": "={{ (() => { const n = $now.setZone('Europe/Warsaw'); const d = n.weekday; const m = n.hour * 60 + n.minute; if (d <= 5) { return m >= 540 && m < 1140; } if (d === 6) { return m >= 480 && m < 930; } return false; })() }}",
+              "rightValue": ""
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b20314c9-4ca8-40ff-9a0b-d9d623566981",
+      "name": "Godziny otwarcia",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -736,
+        304
+      ],
+      "notesInFlow": true,
+      "notes": "WBPiCAK opening hours. Timezone Europe/Warsaw is set explicitly inside the expression, independent of the workflow timezone and of the container. Mon-Fri 09:00-19:00 (540-1140 minutes past midnight). Sat 08:00-15:30 (480-930). Sunday is closed by an explicit weekday condition, not by an hour range. The comparison runs on MINUTES, because Saturday ends at half past three. The closing hour is excluded: at 19:00 and at 15:30 the gate says no. REPLACES the commented-out cron entry at config/config.exs:21 ({\"*/3 8-19 * * 1-6\"}), an earlier idea of Mon-Sat 8-19. The new hours are more precise: they separate Saturday from weekdays and close Sunday properly. The Quantum job still in the repo runs every minute, which is irrelevant next to this 5-minute workflow."
+    },
+    {
+      "parameters": {
+        "url": "https://katalog.wbp.poznan.pl/index.php?KatID=2&typ=repl&plnk=nowosci&sort=dat",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "user-agent",
+              "value": "SowaNotifier Bot"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "f199a985-ca1d-475b-b1ba-86ca63ab4d01",
+      "name": "Pobierz strone nowosci",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -528,
+        224
+      ],
+      "notes": "GET, response as text (793 KB). The user-agent header is kept from api.ex:4."
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "records",
+              "cssSelector": ".record-details",
+              "returnValue": "html",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "609c8866-1fc8-47e7-b986-7f4254d24151",
+      "name": "Wytnij rekordy",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -304,
+        224
+      ],
+      "notes": "The container for a single book is .record-details (parser.ex:7). The page returns at most 20."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "records-present",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              },
+              "leftValue": "={{ ($json.records || []).length }}",
+              "rightValue": 0
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "bad94766-891c-400d-8de0-213795b20efe",
+      "name": "Czy sa rekordy",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -80,
+        224
+      ],
+      "notesInFlow": true,
+      "notes": "Zero records is a SUCCESS in n8n, so the Error Trigger never fires. A broken selector then looks exactly like a quiet day with no new books. The false branch sends a warning."
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "records",
+        "options": {}
+      },
+      "id": "69e35c51-7b9d-4fda-a479-608e05f18d84",
+      "name": "Jedna pozycja na ksiazke",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        144,
+        128
+      ],
+      "notes": "Split Out IGNORES destinationFieldName: items keep the source field name, so the consumer must read \"records\", not \"record\". Getting this wrong produced: No property named \"record\" exists!"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "dataPropertyName": "records",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "title",
+              "cssSelector": ".desc-o-title"
+            },
+            {
+              "key": "publisher",
+              "cssSelector": ".desc-o-publ"
+            },
+            {
+              "key": "onclick",
+              "cssSelector": ".record-thumb-with-av div[onclick]",
+              "returnValue": "attribute",
+              "attribute": "onclick"
+            },
+            {
+              "key": "imgSrc",
+              "cssSelector": ".record-thumb-with-av img",
+              "returnValue": "attribute",
+              "attribute": "src"
+            },
+            {
+              "key": "header",
+              "cssSelector": ".desc-header"
+            },
+            {
+              "key": "availableRaw",
+              "cssSelector": ".record-av-available",
+              "returnValue": "html"
+            },
+            {
+              "key": "queueRaw",
+              "cssSelector": ".opacit-queue"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9c2567da-e1a9-495b-b4a7-d96a355588a3",
+      "name": "Pola ksiazki",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        368,
+        128
+      ],
+      "notes": "Selectors map 1:1 to docs/n8n-spec.md (parser.ex:19, 20, 47, 74, 55, 38). queueRaw <- .opacit-queue is an addition absent from parser.ex."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalizuje surowe pola z wezla HTML do kontraktu z docs/n8n-spec.md.\n// Jedno wejscie = jedna ksiazka.\nconst ws = (s) => (s || '').split(/\\s+/).filter(Boolean).join(' ');\n\n// Wezel HTML z returnValue \"text\" WKLEJA adresy z <a href> jako [https://...].\n// Zdejmujemy je z KAZDEGO pola tekstowego, bo katalog moze zlinkowac dowolne z nich.\nconst unlink = (s) => ws(s).replace(/\\s*\\[\\s*https?:\\/\\/[^\\]]*\\]/g, '');\n\nconst esc = (s) => unlink(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n// Telegram w trybie HTML wymaga ucieczki & < > TAKZE wewnatrz href.\nconst escAttr = (s) => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');\n\nconst out = [];\nfor (const item of $input.all()) {\n  const j = item.json;\n\n  const m = /location\\.href='([^']+)'/.exec(j.onclick || '');\n  const link = m ? m[1] : null;\n\n  const src = (j.imgSrc || '').trim();\n  const img = src ? (src.startsWith('//') ? 'https:' + src : src) : null;\n\n  const header = unlink(j.header);\n  const dm = /(\\d{2}\\.\\d{2}\\.\\d{4})/.exec(header);\n  const addedOn = dm ? dm[1] : header.split(' ')[2] || null;\n\n  const available = !!(j.availableRaw && String(j.availableRaw).trim().length);\n\n  const title = unlink(j.title);\n  const publisher = unlink(j.publisher);\n\n  // Kolejka oczekujacych: .opacit-queue, tekst \"Dlugosc kolejki oczekujacych: N\".\n  // POLE OPCJONALNE - na stronie ma je 15 z 20 ksiazek, egzemplarze dostepne go nie maja.\n  // Gdy go nie ma, wiadomosc ma wygladac dokladnie jak wczesniej: bez separatora,\n  // bez naglowka, bez \"brak danych\".\n  const queue = unlink(j.queueRaw);\n\n  let message =\n    '\\u{1F195} <b>Nowa książka dodana ' + esc(addedOn || '') + '</b>\\n\\n' +\n    '<b><a href=\"' + escAttr(link || '') + '\">' + esc(title) + '</a></b>\\n' +\n    esc(publisher) + '\\n' +\n    'Status: ' + (available ? '✅' : '❌');\n\n  if (queue) {\n    message += '\\n\\n' + esc(queue);\n  }\n\n  // STRAZNIK 1: surowy adres, ktory ominal unlink().\n  if (/\\[\\s*https?:\\/\\//.test(message)) {\n    throw new Error('W zlozonej wiadomosci zostal surowy adres w nawiasach kwadratowych. Ktores pole tekstowe omija unlink(). Ksiazka: ' + title);\n  }\n\n  // STRAZNIK 2: slad po pustym polu opcjonalnym. Wychodzi dopiero na ksiazce\n  // BEZ kolejki, czyli na produkcji - dlatego przebieg ma tu stanac.\n  if (/\\n\\s*$/.test(message)) {\n    throw new Error('Wiadomosc konczy sie pusta linia - puste pole opcjonalne zostawilo separator. Ksiazka: ' + title);\n  }\n  if (/\\n[^\\S\\n]*\\n[^\\S\\n]*\\n/.test(message)) {\n    throw new Error('Wiadomosc ma dwie puste linie pod rzad. Ksiazka: ' + title);\n  }\n\n  if (!link) { continue; }\n  out.push({ json: { title, publisher, link, img, added_on: addedOn, available, queue: queue || null, message } });\n}\nreturn out;"
+      },
+      "id": "2229ccab-4e08-43da-bbf7-458bf20a7d1e",
+      "name": "Znormalizuj i zloz wiadomosc",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        592,
+        128
+      ],
+      "notes": "Regex over onclick, https: prefix for the cover, date as DD.MM.YYYY, availability as a boolean, escaping of & < > for Telegram HTML mode (inside href too). unlink() strips the [https://...] addresses that the HTML node inlines from every <a href>. Three guards THROW AN ERROR: a raw address left in the text, a message ending with a blank line, two blank lines in a row."
+    },
+    {
+      "parameters": {
+        "operation": "removeItemsSeenInPreviousExecutions",
+        "dedupeValue": "={{ $json.link }}",
+        "options": {
+          "historySize": 10000
+        }
+      },
+      "id": "aba1d638-d613-4ba6-b86d-7c1c448efd97",
+      "name": "Odsiej juz ogloszone",
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        800,
+        128
+      ],
+      "notesInFlow": true,
+      "notes": "Key is link (helpers.ex:39-42) - it carries the record identifier, so it is stable. historySize 10000 is an ENTRY COUNTER, not a time window. At roughly 3 new books per day it lasts years. WARNING: this node records the link BEFORE the message goes out, unlike Elixir, where only successfully sent items reached the state file (lib/sowa_notifier.ex:16-19)."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cover-present",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.img }}",
+              "rightValue": ""
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "611a880a-2234-4844-969d-72dc0a5296de",
+      "name": "Czy jest okladka",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1248,
+        128
+      ],
+      "notesInFlow": false,
+      "notes": "19 of 20 books have a cover. With a cover the item goes to sendPhoto with a caption, without one to sendMessage (bot.ex:41-45)."
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "-1002360747494",
+        "file": "={{ $json.img }}",
+        "additionalFields": {
+          "caption": "={{ $json.message }}",
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "9ab9ac90-3935-42f4-b6a8-43bfb1bd8e28",
+      "name": "Telegram: z okladka",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1472,
+        32
+      ],
+      "notesInFlow": true,
+      "webhookId": "280dd6b0-67ea-4087-a8fd-7e9b6120b49d",
+      "credentials": {
+        "telegramApi": {
+          "id": "CH6EHo4yaYfwdBAc",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueErrorOutput",
+      "notes": "chatId = the author private chat 110718087 (production target: the wbpicak channel). onError=continueErrorOutput: when Telegram cannot fetch the cover, the item leaves through the error output into \"Telegram: bez okladki\" and is still announced as plain text. Without this branch, deduplication records the link before sending, so every failure would permanently lose a book. CEILING OF THIS BRANCH: if BOTH sendPhoto and sendMessage fail, the book is marked as announced and WILL NOT COME BACK. This approximates the Elixir semantics, it does not reproduce them. Deliberately not fixed."
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "-1002360747494",
+        "file": "AgACAgQAAxkDAAIBR2qexG7-YTu6i5th0f0QxC3aFw0BAAJkEGsbGGT4UMb1AAEOE-SGXAEAAwIAA20AAz0E",
+        "additionalFields": {
+          "caption": "={{ $json.message }}",
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "35b4e4c8-1cc4-4bd2-8f6c-d3f437ffd72e",
+      "name": "Telegram: bez okladki",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1472,
+        224
+      ],
+      "webhookId": "2f8d51e1-f5e5-4e29-94f7-a2fa0931badd",
+      "credentials": {
+        "telegramApi": {
+          "id": "CH6EHo4yaYfwdBAc",
+          "name": "Telegram account"
+        }
+      },
+      "notes": "Now sends a PHOTO with a grey \"Brak okladki\" placeholder instead of a text message. Reason: editMessageMedia only works on a message that ALREADY carries media - a text message can never become a photo message. The placeholder makes the later in-place swap possible, which is what keeps the post date and its position in the feed. The file is a permanent Telegram file_id, so nothing has to be hosted and Telegram never fetches a URL for it. Receives two kinds of item: books with no cover at all, and books whose cover Telegram refused to fetch."
+    },
+    {
+      "parameters": {
+        "chatId": "110718087",
+        "text": "=⚠️ SowaNotifier: wezel HTML zwrocil ZERO rekordow ze strony nowosci WBPiCAK.\n\nTo znaczy, ze selektor .record-details przestal pasowac albo strona padla. Sprawdz docs/n8n-spec.md i porownaj selektory ze strona.\n\nCzas: {{ $now.setZone('Europe/Warsaw').toFormat('yyyy-MM-dd HH:mm') }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "a80587ff-66a7-4a3c-9d90-9820afa21c76",
+      "name": "Ostrzez: zero rekordow",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        384
+      ],
+      "webhookId": "8725ac40-0370-4095-aa01-ec7f174e5f62",
+      "credentials": {
+        "telegramApi": {
+          "id": "CH6EHo4yaYfwdBAc",
+          "name": "Telegram account"
+        }
+      },
+      "notes": "Same chatId. This is the broken-selector guard, not a book notification."
+    },
+    {
+      "parameters": {
+        "content": "## ✅ PUBLISHED — live configuration\n\nThe workflow is active. Books go to the production channel `-1002360747494` (\"Sowa 4 WBPiCAK\").\nThe opening-hours gate is enabled. There is NO cap on books per run — every new book is its own notification.\n\nA Limit node used to sit between deduplication and sending. It was removed, and removing it fixed a defect.\nIt stood AFTER `Odsiej juz ogloszone`, so books 11 and beyond were already recorded as announced at the moment they were cut.\nThey were lost for good — the same class of loss the error branch was built to prevent.\nThe Elixir cap did the opposite: the surplus stayed OUT of the state file and returned on the next run.\n\n`Ostrzez: zero rekordow` deliberately still points at the author private chat `110718087`.\nA broken-selector warning is an operational message for the author, not content for channel readers.\n\n### Overriding principle\n\nThis workflow REPRODUCES logic from the sowa_notifier repository. Every departure from `lib/` must be deliberate and written down.\nTwo accidental departures have already cost us a run. Details: `docs/n8n-spec.md`.\n\n### Deliberate departure: there is no delay between messages\n\nElixir waited 5 seconds between books (`Process.sleep(5000)` at `lib/sowa_notifier.ex:45` and `:61`). This workflow has no equivalent, on purpose.\nA Wait node existed here and was removed. Two reasons, both measured:\n1. The n8n Wait node pauses the execution ONCE, not once per item (10 items in, `executionTime` exactly the configured interval). It never was a delay between messages.\n2. A real per-item delay would fix a cause that does not exist — see the cover finding below. Pace was ruled out by direct experiment.\nIf Telegram ever starts returning 429 or `retry_after`, revisit this with `Loop Over Items` (batch size 1) plus Wait inside the loop.\n\n### Known debt: node names stay in Polish\n\nEvery artifact in this project is written in English. Node names are the deliberate exception.\nn8n expressions reference nodes by name as a plain string, so renaming during testing can break connections in a way that only surfaces in production.\nThe rename happens in one pass after publication.\n\n### Error branch on `Telegram: z okladka` — the permanent answer\n\n`onError = continueErrorOutput`, error output wired to `Telegram: bez okladki`.\nReason: deduplication records the link BEFORE the message goes out, so without this branch every failed send permanently loses a book.\nElixir behaved differently: only successfully sent items reached the state file (`lib/sowa_notifier.ex:16-19`), so a failed one returned on the next run.\n\n**CEILING OF THIS BRANCH:** if BOTH `sendPhoto` and `sendMessage` fail, the book is marked as announced and WILL NOT COME BACK.\nThis approximates the Elixir semantics rather than reproducing them. Deliberately not fixed.\n\n### Known: one cover Telegram will not fetch — pace RULED OUT\n\n`Willa Hossa / Marcin Moscinski` — `vwca7mjprrvt2.jpg`, error `400 Bad Request: failed to get HTTP URL content`.\nThe file is healthy: HTTP 200, image/jpeg, 12397 B, baseline JPEG, RGB/sRGB, 3 components, decodes cleanly, ends with FFD9 — indistinguishable from a working neighbour.\nNeither host shows a bot-protection signature (no cf-ray, cf-mitigated, x-sucuri-id), and the cover host does not vary its response by user-agent, including a Telegram-like one.\n\nTwo independent experiments rule out pace:\n- Run 294, in-batch control: 19 cover attempts in one batch, only the fourth failed. Positions 8, 12, 16 and 20 all succeeded.\n- Run 296, sent completely alone: the same cover was the ONLY item in the run, with no batch around it, and it still failed after 120 ms.\n\nRoot cause UNKNOWN. The error text says \"failed to get HTTP URL content\", which is a FETCH failure, not a decode failure, so inspecting the file cannot explain it.\nRate: 1 failure in 20 books. The error branch handles it and the book is still announced, as plain text.\n\n### Failure alerting — silence is the real failure mode\n\nIf the library rebuilds the page, the HTML node returns zero items and the run finishes SUCCESSFULLY. The bot would go quiet for weeks while looking healthy.\nThe false branch therefore ends with `Fail the run on zero records` (Stop and Error), placed AFTER the warning message, so the warning still goes out and the run then fails on purpose.\n\nAlerts live in a separate workflow: **SowaNotifier WBPiCAK - failure alerts** (`RgaekiE93myMWYx1`), Error Trigger -> Telegram sendMessage to `110718087`, active.\nThis workflow points at it via `Settings -> Error workflow`.\n\n**The Error Trigger fires ONLY on automatic executions that end in an error.** It does not fire on manual runs and cannot be tested by clicking Execute.\nDo not claim the alerting works on the strength of a manual run.\n\nParsing contract and message template: `docs/n8n-spec.md`.\n\n### Cover retry branch — added 2026-09-07, rebuilt the same day\n\nThe catalogue often adds a cover hours or days after the book appears. On 2026-09-07 TEN announcements went out without one, so this is common, not an edge case.\n\n**The post is edited IN PLACE. It keeps its date and its position in the feed.** Telegram leaves `date` untouched and only adds `edit_date`, so the message does not move and does not notify again. Verified on run 1370: `date` 1788789870 unchanged, `edit_date` 1788792342 added.\n\nThat requirement drives the whole shape, including the part that looks odd:\n\n1. `Telegram: bez okladki` sends a PHOTO carrying a grey \"Brak okladki\" placeholder, not a text message. Reason: `editMessageMedia` works ONLY on a message that already carries media, and a text message can NEVER become a photo message. Without the placeholder there is nothing to edit later. The image is a permanent Telegram `file_id`, so nothing is hosted and Telegram never fetches a URL for it.\n2. `Zapisz brak okladki` records `{message_id, chat_id, first_seen, checks_left: 60}` in GLOBAL static data, keyed by the catalog link. The link is read from `caption_entities` of the Telegram response (with `entities` as fallback), NOT from item pairing, because this node also receives items from the error output of `Telegram: z okladka`.\n3. `Retry: czy okladka juz jest` hangs off `Znormalizuj i zloz wiadomosc`, BEFORE deduplication — after it the pending book is already filtered out. Costs no extra HTTP request: the listing is fetched every 5 minutes anyway.\n4. `Retry: edytuj okladke` calls `editMessageMedia` on the raw Bot API. `media` is passed as a JSON-SERIALIZED STRING, the form the Bot API documents, which is valid under both application/json and multipart/form-data. Confirmed working on run 1370.\n5. `Retry: sprzataj stan` removes the pending entry ONLY after Telegram confirms the edit, reading the link back from `caption_entities`.\n\nBudget is 60 CHECKS, not 5 hours of wall clock. The opening-hours gate stops the workflow at 19:00 and all day Sunday, so a wall-clock window would expire overnight for any book added late in the day. A 7-day TTL is the backstop against a leak: a book that drops off the listing never spends its check budget.\n\n**An edit is idempotent, so a failed attempt costs nothing and is repeated.** The error output of `Retry: edytuj okladke` is deliberately unconnected: the placeholder stays, the pending entry survives, and the next run tries again until the budget runs out. This is why the branch no longer drops an entry on first attempt — the earlier delete-plus-resend version had to, because repeating it would have produced a duplicate post.\n\n**THE TOKEN IS IN CLEAR TEXT IN `Retry: edytuj okladke`. This was a deliberate, measured trade.**\nThe n8n Telegram node has no `editMessageMedia` and no `editMessageCaption` (confirmed via `POST /rest/node-types`, not the under-reporting `/types/nodes.json`). The `telegramApi` credential has no `authenticate`, so an HTTP Request node cannot borrow it, and `$env` is empty on this instance. No community node on npm offers the method either.\nCost, measured rather than assumed: node `parameters` are copied VERBATIM into every execution snapshot, so the token lands in roughly 130 unencrypted records per day, forever, plus the workflow row and every version. A credential appears only as `{id, name}` and never leaks. Blast radius is write-and-delete on this one channel; rotation means a new token from BotFather plus updating the credential.\nSaving successful executions was kept ON anyway, because those snapshots are what made today's three defects diagnosable. If that ever changes, set `saveDataSuccessExecution: \"none\"` on this workflow.\n\n**CEILINGS, all deliberate:**\n- Every coverless post shows the grey placeholder until the cover lands. On 2026-09-07 that was 10 posts, mostly fixed within the hour.\n- A book whose cover Telegram refuses to fetch keeps the placeholder for good, instead of the clean text post it used to get. Known rate: 1 in 20, see the cover finding below.\n- If no cover appears within 60 checks, the placeholder stands.\n- Posts announced as TEXT before this rebuild can never be upgraded: `editMessageMedia` needs pre-existing media. Two such pending entries (messages 5111, 5113) plus one more (5114) were cleared by hand rather than left to burn attempts.\n\nThe previous delete-plus-resend version worked and was verified on 7 books, but it always produced a NEW message: new date, bottom of the channel. It was replaced for exactly that reason.\n### INCIDENT 2026-09-03 to 2026-09-07: four days of edits were never published\n\nn8n 2.7.5 separates the DRAFT from the PUBLISHED version. Saving changes NOTHING in production; only `Publish` does.\n`workflowPublishHistory` held exactly ONE event, from 2026-09-03 22:10, while `versionCounter` had reached 45.\nEvery automatic execution in between ran the 03.09 graph, INCLUDING `Najwyzej 10 na przebieg` — the Limit node whose removal the section above already described as a fix.\nIn production it kept capping each run at 10 books AFTER deduplication, so books 11 and beyond were recorded as announced and then dropped for good. For four days.\n\nHow to check, and never from the canvas alone: on `GET /rest/workflows/<id>`, `activeVersionId` must equal `versionId`. An execution's own `workflowData.updatedAt` shows which graph actually ran.\n\n### Global static data lives under `staticData.global`\n\n`$getWorkflowStaticData('global')` reads `staticData.global`; `$getWorkflowStaticData('node')` reads `staticData[\"node:<node name>\"]`.\nSeeding `pendingCovers` at the TOP level of `staticData` is invisible to the Code nodes: run 1353 read an empty map and did not even decrement a counter.\nStatic data is persisted on PRODUCTION executions only, so a manual run records nothing.",
+        "height": 2320,
+        "width": 620,
+        "color": 3
+      },
+      "id": "07ea5e42-1890-4b1f-aad3-4489fd4413fe",
+      "name": "STAN TESTOWY - nie publikowac",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        608,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "errorMessage": "Zero records extracted from the WBPiCAK new-arrivals page. The .record-details selector no longer matches, or the page is down. Compare the selectors against docs/n8n-spec.md."
+      },
+      "id": "17d96ebb-894d-4dab-aff1-866e6fe294df",
+      "name": "Fail the run on zero records",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        368,
+        384
+      ],
+      "notesInFlow": true,
+      "notes": "Zero records is a SUCCESS in n8n, so without this node the run ends green and the Error Trigger never fires. A broken selector would then look exactly like a quiet day and the bot would stay silent for weeks while appearing healthy. This node turns that silence into a failure the alert workflow can see. It runs AFTER the warning message, so the warning still goes out."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Records a coverless announcement so a later run can swap the placeholder for the real cover.\n// The catalog link is read back from the Telegram response, NOT from item pairing, because this\n// node also receives items from the error output of \"Telegram: z okladka\".\n// The post is now a PHOTO, so the link lives in caption_entities; entities is kept as a fallback\n// for anything still arriving as plain text.\nconst sd = $getWorkflowStaticData('global');\nif (!sd.pendingCovers) { sd.pendingCovers = {}; }\n\nfor (const item of $input.all()) {\n  const res = item.json.result;\n  if (!res || !res.message_id) { continue; }\n  const ents = res.caption_entities || res.entities || [];\n  const ent = ents.find((e) => e.type === 'text_link' && /katalog\\.wbp\\.poznan\\.pl/.test(e.url || ''));\n  if (!ent) { continue; }\n  sd.pendingCovers[ent.url] = {\n    message_id: res.message_id,\n    chat_id: (res.chat || {}).id || null,\n    first_seen: Date.now(),\n    checks_left: 60,\n  };\n}\nreturn $input.all();"
+      },
+      "id": "c08799d7-7ecc-43c1-82e5-26aa8c64db82",
+      "name": "Zapisz brak okladki",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1696,
+        224
+      ],
+      "notesInFlow": true,
+      "notes": "Writes {message_id, chat_id, first_seen, checks_left} into workflow static data, keyed by the catalog link. The link is read back from result.entities of the Telegram response, NOT from item pairing, because this node also receives items that arrived through the error output of \"Telegram: z okladka\". Static data is only persisted on production executions, so a manual run records nothing."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Cover retry, riding on the listing this run already fetched - no extra request to the library.\n// Emits a book only once the catalogue publishes its cover.\n//\n// Budget is 60 CHECKS, not 5 hours of wall clock. The opening-hours gate stops the workflow at\n// 19:00 and all day Sunday, so a wall-clock window would expire overnight for any book added late\n// in the day. A 7-day TTL is the backstop against a leak: a book that drops off the listing never\n// spends its check budget.\nconst HARD_TTL_MS = 7 * 24 * 60 * 60 * 1000;\nconst sd = $getWorkflowStaticData('global');\nif (!sd.pendingCovers) { sd.pendingCovers = {}; }\nconst pending = sd.pendingCovers;\nconst now = Date.now();\n\nfor (const [k, r] of Object.entries(pending)) {\n  if (!r || !r.first_seen || now - r.first_seen > HARD_TTL_MS) { delete pending[k]; }\n}\n\nconst out = [];\nfor (const item of $input.all()) {\n  const j = item.json;\n  const rec = pending[j.link];\n  if (!rec) { continue; }\n\n  rec.checks_left = (rec.checks_left || 0) - 1;\n  const budgetSpent = rec.checks_left <= 0;\n\n  if (!j.img) {\n    if (budgetSpent) { delete pending[j.link]; }\n    continue;\n  }\n\n  // The entry is NOT dropped here. An edit is idempotent, so a failed attempt is safe to repeat;\n  // only \"Retry: sprzataj stan\" removes the entry, and only after Telegram confirms the edit.\n  // The budget still bounds the number of attempts.\n  if (budgetSpent) { delete pending[j.link]; }\n  out.push({ json: {\n    link: j.link,\n    img: j.img,\n    message: j.message,\n    chat_id: String(rec.chat_id),\n    message_id: rec.message_id,\n  } });\n}\nreturn out;"
+      },
+      "id": "02282cd0-0ce6-47f3-8caf-8c3f37cc3b4d",
+      "name": "Retry: czy okladka juz jest",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        480
+      ],
+      "notesInFlow": true,
+      "notes": "Fed from \"Znormalizuj i zloz wiadomosc\", BEFORE deduplication - after it the pending book would already be filtered out. Costs no extra HTTP request: the listing is fetched every 5 minutes anyway. Emits only books that are pending AND now carry an img."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot__PASTE_BOT_TOKEN_HERE__/editMessageMedia",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ chat_id: $json.chat_id, message_id: $json.message_id, media: JSON.stringify({ type: 'photo', media: $json.img, caption: $json.message, parse_mode: 'HTML' }) }) }}",
+        "options": {}
+      },
+      "id": "ee0ee1b3-722e-49eb-acab-f6b72ece5433",
+      "name": "Retry: edytuj okladke",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1472,
+        480
+      ],
+      "notesInFlow": true,
+      "onError": "continueErrorOutput",
+      "notes": "Raw Bot API, because the n8n Telegram node has no editMessageMedia (2.7.5 offers only editMessageText, deleteMessage, sendPhoto). The telegramApi credential has no authenticate, so HTTP Request cannot borrow it, and $env is empty on this instance - the token therefore sits in this URL in clear text and is copied into every execution snapshot. That trade was made deliberately to keep the post date and its feed position. \"media\" is passed as a JSON-SERIALIZED STRING, which is the form the Bot API documents and which is valid under both application/json and multipart/form-data. Error output is left unconnected on purpose: a failed edit leaves the placeholder in place and the pending entry survives, so the next run tries again."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Removes a pending entry only after Telegram confirms the edit. The catalog link is read back\n// from the response caption_entities, so this does not depend on item pairing either.\nconst sd = $getWorkflowStaticData('global');\nif (!sd.pendingCovers) { sd.pendingCovers = {}; }\nconst pending = sd.pendingCovers;\n\nfor (const item of $input.all()) {\n  const res = item.json.result;\n  if (!res) { continue; }\n  const ents = res.caption_entities || res.entities || [];\n  const ent = ents.find((e) => e.type === 'text_link' && /katalog\\.wbp\\.poznan\\.pl/.test(e.url || ''));\n  if (!ent) { continue; }\n  delete pending[ent.url];\n}\nreturn $input.all();"
+      },
+      "id": "4b2348f9-ddc2-4c94-aa3b-8b61a0fa580d",
+      "name": "Retry: sprzataj stan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1696,
+        480
+      ],
+      "notesInFlow": true,
+      "notes": "Clears the pending entry ONLY after Telegram confirms the edit. Unlike the old delete-plus-resend branch, a failed attempt now costs nothing, so the entry is kept and retried within its budget."
+    }
+  ],
+  "connections": {
+    "Co 5 minut": {
+      "main": [
+        [
+          {
+            "node": "Godziny otwarcia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Godziny otwarcia": {
+      "main": [
+        [
+          {
+            "node": "Pobierz strone nowosci",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Pobierz strone nowosci": {
+      "main": [
+        [
+          {
+            "node": "Wytnij rekordy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wytnij rekordy": {
+      "main": [
+        [
+          {
+            "node": "Czy sa rekordy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Czy sa rekordy": {
+      "main": [
+        [
+          {
+            "node": "Jedna pozycja na ksiazke",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ostrzez: zero rekordow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jedna pozycja na ksiazke": {
+      "main": [
+        [
+          {
+            "node": "Pola ksiazki",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pola ksiazki": {
+      "main": [
+        [
+          {
+            "node": "Znormalizuj i zloz wiadomosc",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Znormalizuj i zloz wiadomosc": {
+      "main": [
+        [
+          {
+            "node": "Odsiej juz ogloszone",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Retry: czy okladka juz jest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Odsiej juz ogloszone": {
+      "main": [
+        [
+          {
+            "node": "Czy jest okladka",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Czy jest okladka": {
+      "main": [
+        [
+          {
+            "node": "Telegram: z okladka",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram: bez okladki",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram: z okladka": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Telegram: bez okladki",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ostrzez: zero rekordow": {
+      "main": [
+        [
+          {
+            "node": "Fail the run on zero records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram: bez okladki": {
+      "main": [
+        [
+          {
+            "node": "Zapisz brak okladki",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retry: czy okladka juz jest": {
+      "main": [
+        [
+          {
+            "node": "Retry: edytuj okladke",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retry: edytuj okladke": {
+      "main": [
+        [
+          {
+            "node": "Retry: sprzataj stan",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timezone": "Europe/Warsaw",
+    "errorWorkflow": "RgaekiE93myMWYx1"
+  }
+}
